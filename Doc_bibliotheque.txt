@@ -1,0 +1,287 @@
+-- INTERACTIONS TABLE AUTHOR 
+-- Insérer un nouvel auteur 
+INSERT INTO sys.author (last_name, first_name) 
+VALUES ('/*String*/', '/*String*/');
+
+-- Modifier un auteur
+UPDATE sys.author 
+SET last_name  = '/*String*/' 
+WHERE id_author = '/*int*/';
+
+-- Afficher la table des auteurs
+SELECT * 
+FROM sys.author 
+ORDER BY last_name;
+
+
+
+-- INTERACTIONS TABLE LIST_LANGUAGE
+-- Insertion d'une nouvelle langue
+INSERT INTO sys.list_language (language)
+VALUES ('/*String*/');
+
+-- Modifier une langue
+UPDATE sys.list_language 
+SET language  = '/*String*/' 
+WHERE id_language = /*int*/;
+
+-- Afficher la table des langues
+SELECT *
+FROM sys.list_language
+ORDER BY language;
+
+
+
+-- INTERACTIONS TABLE LIST_THEME
+-- Insertion d'un nouveau theme
+INSERT INTO sys.list_theme (theme) 
+VALUES ('/*String*/');
+
+-- Modifier un theme
+UPDATE sys.list_theme
+SET theme = '/*String*/'
+WHERE id_theme = /*int*/;
+
+-- Afficher la table des themes
+SELECT * 
+FROM sys.list_theme
+ORDER BY theme;
+
+
+
+-- INTERACTIONS TABLE LIST_EDITOR
+-- Insertion d'un nouvel éditeur
+INSERT INTO sys.list_editor (editor) 
+VALUES ('/*String*/');
+
+-- Modifier un éditeur
+UPDATE sys.list_editor
+SET editor = '/*String*/'
+WHERE id_list_editor = /*int*/;
+
+-- Afficher la table des éditeurs
+SELECT * 
+FROM sys.list_editor
+ORDER BY editor;
+
+
+
+-- INTERACTIONS TABLE RELEASE_DATE
+-- Insertion d'une nouvelle date de parution
+INSERT INTO sys.release_date (year) 
+VALUES ('/*yyyy*/');
+
+-- Modifier un éditeur
+UPDATE sys.release_date
+SET year = '/*yyyy*/'
+WHERE id_release_date = /*int*/;
+
+-- Afficher la table des éditeurs
+SELECT * 
+FROM sys.release_date
+ORDER BY year desc;
+
+
+
+-- INTERACTIONS TABLE USER
+-- Insertion d'un nouvel utilisateur
+INSERT INTO sys.user (last_name, first_name, address, mail_address, phone_number, birth_date)
+VALUES ('/*String*/', '/*String*/', '/*String*/', '/*String*/', '/*String*/', '/*YYYY-MM-DD*/');
+
+-- Modifier un utilisateur
+-- Modifier le nom
+UPDATE sys.user
+SET last_name = '/*String*/'
+WHERE id_user = /*int*/;
+-- Modifier le prénom
+UPDATE sys.user
+SET first_name = '/*String*/'
+WHERE id_user = /*int*/;
+-- Modifier l'adresse
+UPDATE sys.user
+SET address = '/*String*/'
+WHERE id_user = /*int*/;
+-- Modifier l'adresse mail
+UPDATE sys.user
+SET mail_address = '/*String*/'
+WHERE id_user = /*int*/;
+-- Modifier le numéro de téléphone
+UPDATE sys.user
+SET phone_number = '/*String*/'
+WHERE id_user = /*int*/;
+-- Modifier la date de naissance
+UPDATE sys.user
+SET birth_date = '/*YYYY-MM-DD*/'
+WHERE id_user = /*int*/;
+
+-- Afficher la table des utilisateurs
+SELECT * 
+FROM sys.user
+ORDER BY last_name,first_name;
+
+
+
+-- INTERACTIONS TABLE BORROWING
+-- Insertion d'un nouvel emprunt
+INSERT INTO sys.borrowing (date_borrowing, fk_id_user, fk_id_book)
+VALUES ('YYYY-MM-DD*/', /*int*/, /*int*/);
+
+-- Modifier un emprunt
+-- Modifier la date de l'emprunt
+UPDATE sys.borrowing
+SET date_borrowing = '/*YYYY-MM-DD*/'
+WHERE id_borrowing = /*int*/;
+-- Modifier l'emprunteur
+UPDATE sys.borrowing
+SET fk_id_user = '/*int*/'
+WHERE id_borrowing = /*int*/;
+-- Modifier le livre emprunté
+UPDATE sys.borrowing
+SET fk_id_book = '/*int*/'
+WHERE id_borrowing = /*int*/;
+
+-- Afficher les emprunts
+SELECT * 
+FROM sys.borrowing
+ORDER BY date_borrowing desc;
+-- Afficher les emprunts avec le nom de l'utilisateur, son numéro de téléphone et le livre emprunté
+SELECT B.date_borrowing, U.last_name, U.first_name, U.phone_number, B2.title
+FROM sys.borrowing as B 
+	INNER JOIN sys.user as U
+		ON B.fk_id_user = U.id_user
+	INNER JOIN sys.book as B2
+		ON B.fk_id_book = B2.id_book
+ORDER BY date_borrowing desc;
+
+
+
+-- INTERACTIONS TABLE BOOK_AUTHOR
+-- Insertion d'un nouveau lien livre/auteur
+INSERT INTO sys.book_author (id_author, id_book)
+VALUES (/*int*/, /*int*/);
+
+-- Modifier un lien
+-- Modifier l'auteur
+UPDATE sys.book_author
+SET id_author = /*int*/
+WHERE id_author = /*int*/ AND id_book = /*int*/;
+-- Modifier le livre
+UPDATE sys.book_author
+SET id_book = /*int*/
+WHERE id_author = /*int*/ AND id_book = /*int*/;
+
+-- Afficher les liens
+SELECT * 
+FROM sys.book_author
+ORDER BY id_author,id_book;
+-- Afficher la liste de tous les livres avec les auteurs correspondants
+SELECT B.title, A.first_name, A.last_name
+FROM sys.book_author as BA
+	INNER JOIN sys.book as B
+		ON B.id_book = BA.id_book
+	INNER JOIN sys.author as A
+		ON A.id_author = BA.id_author
+ORDER BY B.title;
+-- Afficher la liste des livres par auteur
+SELECT B.title, A.first_name, A.last_name
+FROM sys.book_author as BA
+	INNER JOIN sys.book as B
+		ON B.id_book = BA.id_book
+	INNER JOIN sys.author as A
+		ON A.id_author = BA.id_author
+WHERE A.last_name LIKE '%/*String*/%' AND A.first_name LIKE '%/*String*/%'
+ORDER BY B.title;
+-- Afficher la liste des auteurs par livre
+SELECT A.first_name, A.last_name, B.title
+FROM sys.book_author as BA
+	INNER JOIN sys.book as B
+		ON B.id_book = BA.id_book
+	INNER JOIN sys.author as A
+		ON A.id_author = BA.id_author
+WHERE B.title LIKE '%/*String*/%'
+ORDER BY A.first_name, A.last_name;
+
+
+-- INTERACTIONS TABLE BOOK
+-- Insertion d'un nouveau livre
+INSERT INTO sys.book (title, restriction, secondary_theme, fk_id_language, fk_id_release_date, fk_id_list_editor, fk_id_theme)
+VALUES ('/*String*/', /*int*/, '/*String*/',/*int*/, /*int*/, /*int*/, /*int*/);
+
+-- Modifier le titre d'un livre
+UPDATE sys.book
+SET title = '/*String*/'
+WHERE id_book = /*int*/;
+-- Modifier la restriction (âge à partir duquel on peut lire ce livre)
+UPDATE sys.book
+SET restriction = /*int*/
+WHERE id_book = /*int*/;
+-- Modifier les thèmes secondaires
+UPDATE sys.book
+SET secondary_theme = '/*String*/'
+WHERE id_book = /*int*/;
+-- Modifier le language
+UPDATE sys.book
+SET fk_id_language = /*int*/
+WHERE id_book = /*int*/;
+-- Modifier la date de parution
+UPDATE sys.book
+SET fk_id_release_date = /*int*/
+WHERE id_book = /*int*/;
+-- Modifier l'éditeur
+UPDATE sys.book
+SET fk_id_list_editor = /*int*/
+WHERE id_book = /*int*/;
+-- Modifier le thème
+UPDATE sys.book
+SET fk_id_theme = /*int*/
+WHERE id_book = /*int*/;
+
+-- Afficher la liste des livres
+SELECT B.title, A.first_name, A.last_name, L.language, R.year, E.editor, T.theme, B.restriction, B.secondary_theme
+FROM sys.book as B
+	INNER JOIN sys.list_language as L
+		ON B.fk_id_language = L.id_language
+	INNER JOIN sys.release_date as R
+		ON B.fk_id_release_date = R.id_release_date
+	INNER JOIN sys.list_editor as E
+		ON B.fk_id_list_editor = E.id_list_editor
+	INNER JOIN sys.list_theme as T
+		ON B.fk_id_theme = T.id_theme
+	INNER JOIN sys.book_author as BA
+		ON BA.id_book = B.id_book
+	INNER JOIN sys.author as A
+		ON BA.id_author = A.id_author
+ORDER BY B.title;
+-- Afficher les livres avec restriction
+SELECT title, restriction
+FROM sys.book
+WHERE restriction IS NOT NULL
+ORDER BY title;
+-- Afficher les livres d'un theme particulier
+SELECT B.title, T.theme
+FROM sys.book as B
+	INNER JOIN sys.list_theme as T
+		ON B.fk_id_theme = T.id_theme
+WHERE T.theme LIKE '%/*String*/%'
+ORDER BY B.title;
+-- Afficher les livres d'une langue particuliere
+SELECT B.title, L.language
+FROM sys.book as B
+	INNER JOIN sys.list_language as L
+		ON B.fk_id_language = L.id_language
+WHERE L.language LIKE '%/*String*/%'
+ORDER BY B.title;
+-- Afficher les livres d'un editeur particulier
+SELECT B.title, E.editor
+FROM sys.book as B
+	INNER JOIN sys.list_editor as E
+		ON B.fk_id_list_editor = E.id_list_editor
+WHERE E.editor LIKE '%/*String*/%'
+ORDER BY B.title;
+-- Afficher les livres parus à une date particulière
+SELECT B.title, R.release_date
+FROM sys.book as B
+	INNER JOIN sys.release_date as R
+		ON B.fk_id_release_date = T.id_release_date
+WHERE R.release_date = '/*YYYY*/'
+ORDER BY B.title;
